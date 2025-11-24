@@ -39,4 +39,113 @@ private void inisialisasiData() {
         daftarBuku.add(new Buku("B003", "Struktur Data Lanjut", "Ahmad Fauzi", 7));
     }
 
+// --- Fungsionalitas Login & Pencarian ---
+    public Pengguna login(String username, String password) {
+        Pengguna p = daftarPengguna.get(username);
+        if (p != null && p.getPassword().equals(password)) {
+            return p;
+        }
+        return null;
+    }
+    
+    public Buku cariBuku(String kode) {
+        for (Buku buku : daftarBuku) {
+            if (buku.getKodeBuku().equalsIgnoreCase(kode)) {
+                return buku;
+            }
+        }
+        return null;
+    }
+
+    public Transaksi cariTransaksiAktif(String idTransaksi) {
+        for (Transaksi t : daftarTransaksi) {
+            if (t.getIdTransaksi().equalsIgnoreCase(idTransaksi) && t.getStatus().equals("DIPINJAM")) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    // --- Fungsionalitas Admin: Kelola Buku (CRUD) ---
+    public void tambahBuku(Buku buku) {
+        daftarBuku.add(buku);
+    }
+    
+    public boolean hapusBuku(String kode) {
+        Buku buku = cariBuku(kode);
+        if (buku != null) {
+            daftarBuku.remove(buku);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean editBuku(String kodeBuku, String judulBaru, String penulisBaru, int stokBaru) {
+        Buku buku = cariBuku(kodeBuku);
+        
+        if (buku != null) {
+            buku.setJudul(judulBaru);
+            buku.setPenulis(penulisBaru);
+            buku.setStok(stokBaru);
+            return true;
+        }
+        return false;
+    }
+    
+    // --- Fungsionalitas Anggota: Peminjaman ---
+    public boolean pinjamBuku(Anggota anggota, String kodeBuku) {
+        Buku buku = cariBuku(kodeBuku);
+        if (buku != null && buku.getStok() > 0) {
+            buku.setStok(buku.getStok() - 1);
+            Transaksi t = new Transaksi(anggota, buku, LocalDate.now().toString());
+            daftarTransaksi.add(t);
+            return true;
+        }
+        return false;
+    }
+    
+    // --- Fungsionalitas Anggota: Pengembalian ---
+    public boolean kembalikanBuku(String idTransaksi) {
+        Transaksi transaksi = cariTransaksiAktif(idTransaksi);
+        
+        if (transaksi != null) {
+            transaksi.setPengembalian(LocalDate.now().toString());
+            Buku buku = transaksi.getBuku();
+            buku.setStok(buku.getStok() + 1);
+            
+            return true;
+        }
+        return false;
+    }
+
+    // --- Fungsionalitas Anggota: Riwayat ---
+    public List<Transaksi> getRiwayatPeminjamanByAnggota(Anggota anggota) {
+        List<Transaksi> riwayat = new ArrayList<>();
+        for (Transaksi t : daftarTransaksi) {
+            if (t.getAnggota().getIdPengguna().equals(anggota.getIdPengguna())) {
+                riwayat.add(t);
+            }
+        }
+        return riwayat;
+    }
+    
+    // Getters untuk data
+    public List<Buku> getDaftarBuku() {
+        return daftarBuku;
+    }
+    
+    public List<Pengguna> getDaftarAnggota() {
+        List<Pengguna> anggotaList = new ArrayList<>();
+        for (Pengguna p : daftarPengguna.values()) {
+            if (p instanceof Anggota) {
+                anggotaList.add(p);
+            }
+        }
+        return anggotaList;
+    }
+
+    public List<Transaksi> getDaftarTransaksi() {
+        return daftarTransaksi;
+    }
+}    
     
