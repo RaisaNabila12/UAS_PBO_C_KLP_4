@@ -24,3 +24,15 @@ public abstract class Pengguna {
         return idPengguna;
     }
 
+    public String getNama() {
+        return nama;
+    }
+    
+    public String getUsername() {
+        return username;
+    }
+    
+    public String getPassword() {
+        return password;
+    }
+
