@@ -24,3 +24,19 @@ public class PerpustakaanService {
         
         inisialisasiData();
     }
+    
+private void inisialisasiData() {
+        // Data Login Awal (Dummy Data)
+        Admin admin = new Admin("ADM001", "Admin Utama", "admin", "admin123");
+        Anggota anggota1 = new Anggota("ANG001", "Budi Santoso", "budi", "123", "2024-01-01");
+        
+        daftarPengguna.put(admin.getUsername(), admin);
+        daftarPengguna.put(anggota1.getUsername(), anggota1);
+        
+        // Data Buku Awal
+        daftarBuku.add(new Buku("B001", "Java Programming Fundamentals", "Joko Susilo", 5));
+        daftarBuku.add(new Buku("B002", "Dasar Pemrograman Berorientasi Objek", "Rina Dewi", 3));
+        daftarBuku.add(new Buku("B003", "Struktur Data Lanjut", "Ahmad Fauzi", 7));
+    }
+
+    
