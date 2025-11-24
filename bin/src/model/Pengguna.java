@@ -38,4 +38,7 @@ public abstract class Pengguna {
 
     // Encapsulation: Setter
     public void setNama(String nama) {
+        this.nama = nama;
+    }
+}
 
